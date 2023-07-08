@@ -6,7 +6,13 @@ const {
 const { morganMiddleware } = require('./middlewares/morgan.middleware');
 const { helmetMiddleware } = require('./middlewares/helmet.middleware');
 const { authenticateJsonWebToken } = require('./middlewares/jwt.middleware');
+const { IpSpecificRateLimitingMiddleware } = require('./middlewares/ddos.middleware');
+
 app.use(responseTimeMiddleware);
+app.use(IpSpecificRateLimitingMiddleware.express, (req, res, next) => {
+  // calling next middleware in the queue  
+    next()});
+
 app.use(morganMiddleware);
 app.use(authenticateJsonWebToken);
 app.use(helmetMiddleware,(req, res, next) => {
