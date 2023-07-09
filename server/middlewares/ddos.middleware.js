@@ -1,6 +1,6 @@
 const Ddos = require('ddos');
 // note that this is IP specific and not app specific middleware protection
-module.exports.IpSpecificRateLimitingMiddleware =  new Ddos({
+module.exports.ddosMiddleware =  new Ddos({
   // Specifies the maximum number of requests allowed to burst above the limit before blocking begins. In this example, it's set to 10, meaning if the request rate exceeds the limit suddenly by 10 requests, it will trigger the DDoS protection.
   burst: 10,
   // Defines the maximum number of requests per second allowed from a single IP address. In this case, it's set to 15, so if an IP address sends more than 15 requests per second, it will trigger the DDoS protection
