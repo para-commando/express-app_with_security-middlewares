@@ -10,6 +10,8 @@ const { ddosMiddleware } = require('./middlewares/ddos.middleware');
 const {
   expressRateLimiterMiddleware,
 } = require('./middlewares/expressRateLimit.middleware');
+const Joi = require('joi');
+
 
 app.use(responseTimeMiddleware);
 app.use(ddosMiddleware.express, (req, res, next) => {
@@ -38,9 +40,27 @@ app.use(
     next();
   }
 );
-app.get('/myEndPoint', function (req, res, next) {
-  // ..
-  res.send('This is my EndPoint');
+app.get('/myEndPoint', function (req, res) {
+  const requestObject = {
+    name : 'Anirudh',
+    demand : 'High',
+    myTaskStatus : 'In Progress'
+  }
+  const schema = Joi.object({
+    name: Joi.string().valid('Anirudh', 'Nayak').default(null),
+    demand: Joi.string()
+      .valid('Highest', 'High', 'Medium', 'Low')
+      .default(null),
+    myTaskStatus: Joi.string()
+      .valid('Not Started', 'In Progress', 'Completed', 'Unassigned')
+      .default(null),});
+      const validationResult = schema.validate(requestObject);
+      if (validationResult.error) {
+        res.sendStatus(400);
+      } else {
+        // add further logic to process incoming data,
+        res.sendStatus(200);
+      }
 });
 
 app.listen(3000);
